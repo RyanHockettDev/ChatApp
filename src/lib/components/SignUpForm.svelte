@@ -1,7 +1,10 @@
 <script lang="ts">
 
-    import { currentUser, pb } from "../pocketbase";
+    import { pb } from "../pocketbase";
     import { push } from "svelte-spa-router"
+
+ 
+
 
     let signUpForm = {
         email: "",
@@ -13,24 +16,24 @@
     let message = "";
 
     async function signUp() {
-        //Error handling for missing fields and password fields not matching
+        //Error handling for missing fields
         if (!signUpForm.email || !signUpForm.password || !signUpForm.passwordConfirm || !signUpForm.name) {
                 message = "Please fill out all fields"
-            } else if (signUpForm.password != signUpForm.passwordConfirm){
-                message = "Passwords must match"
             }else {
                 try{
                     // CRUD - Create new user
-                    const createdUser = await pb.collection('users').create(signUpForm);
+                    await pb.collection('users').create(signUpForm);
+                    //Log user in after creation
                     await pb.collection('users').authWithPassword(signUpForm.email, signUpForm.password);
-                    push("/login")
+                    //redirect with spa-router to main chat page
+                    push("/chat")
                 } catch (err) {
                     console.log(err);
                 }
             }  
     };
 
-
+    //Password matching validation
     $: if (signUpForm.password !== signUpForm.passwordConfirm && signUpForm.passwordConfirm !== ""){
         message = "Passwords do not match"
     } else {
@@ -57,10 +60,13 @@
     </div>
     
     {#if message}
-        <p class="text-red-500 mb-5" >{message}</p>
+        <div class="text-center">
+        <p class="text-red-600 mb-5" >{message}</p>
+        </div>
     {/if}
-    
+    <div class="text-center">
     <button type="submit" class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none 
-    focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center 
+    focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-1 text-center 
     dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign Up</button>
+    </div>
 </form>

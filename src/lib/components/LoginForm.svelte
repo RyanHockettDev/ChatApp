@@ -1,10 +1,8 @@
 <script lang="ts">
-    import {currentUser, pb } from '../pocketbase';
+    import { pb } from '../pocketbase';
     import { push } from 'svelte-spa-router'
 
-   // if(currentUser){
-    //    push("/chat")
-    //}
+   
 
     let loginForm = {
         email: "",
@@ -12,6 +10,7 @@
     };
 
     let message = "";
+    
 
     async function login() {
         if (!loginForm.email || !loginForm.password) {
@@ -22,7 +21,7 @@
                 push("/chat")
             } catch(err){
                 console.log(err)
-                message="Incorrect emaill or password"
+                message="Incorrect email or password"
             }
         }
     };
@@ -38,11 +37,15 @@
         <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password:</label>
         <input bind:value={loginForm.password} type="password" id="password" class="bg-primary-50 border border-black-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
     </div>
-    {#if message}
-        <p class="text-red-500 mb-5" >{message}</p>
-    {/if}
     
-    <button type="submit" class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none 
-    focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center 
-    dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Log in</button>
+    {#if message}
+        <div class="text-center">
+        <p class="text-red-600 mb-5" >{message}</p>
+        </div>
+    {/if}
+    <div class="text-center">
+        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none 
+        focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-1 text-center 
+        dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Log in</button>
+    </div>
 </form>

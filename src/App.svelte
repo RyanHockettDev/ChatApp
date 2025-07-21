@@ -3,7 +3,7 @@
   import  routes  from './lib/routes'
 </script>
 
-<main class="flex justify-around">
+<main class="h-screen">
   <Router {routes}/>
 </main>
 
