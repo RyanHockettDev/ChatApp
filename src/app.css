@@ -22,6 +22,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
+.dropdown:focus-within .dropdown-menu {
+  /* @apply block; */
+  display:block;
+}
 
 

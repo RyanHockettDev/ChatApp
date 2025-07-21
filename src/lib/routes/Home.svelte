@@ -1,11 +1,17 @@
 <script lang="ts">
-
+    import {currentUser} from '../pocketbase'
+    import {push} from 'svelte-spa-router'
     import LoginForm from '../components/LoginForm.svelte'
     import SignUpForm from '../components/SignUpForm.svelte';
+    import { onMount } from 'svelte';
+    import { get } from 'svelte/store';
 
-   // if (currentUser) {
-    //    push("/chat");
-   // }
+
+    onMount(() => {
+      if (get(currentUser)) {
+        push('/chat')
+      }
+    })
 
     let selection = false;
 
