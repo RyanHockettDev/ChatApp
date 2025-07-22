@@ -1,14 +1,17 @@
 <script lang="ts">
 
-    import { onMount, onDestroy } from "svelte";
+    import { onMount, onDestroy, tick } from "svelte";
     import { currentUser, pb } from '../pocketbase';
+
+    let container;
+    let isAtBottom = true;
 
     let messages: any[] = [];
     let newMessage: string;
     let unsubscribe: () => void;
 
     onMount(async () => {
-        const resultList = await pb.collection('messages').getList(1, 50, {
+        const resultList = await pb.collection('messages').getList(1, 25, {
             sort: 'created',
             expand: 'user',
         });
@@ -41,20 +44,27 @@
         }
         const createdMessage = await pb.collection('messages').create(data);
         newMessage = ''
-    }
+    };
 
 </script>
-<div class="h-[90%] flex justify-around ">
-    <div class="lg:w-[60%] w-[90%] m-3 border border-primary-800 border-4 rounded-lg relative overflow-auto">
+<div class="h-[86%] flex justify-around ">
+    <div class="lg:w-[60%] w-[90%] m-3 border border-primary-500 border-4 rounded-lg flex flex-col justify-content-end overflow-y-auto">
         {#each messages as message (message.id)}
-            <div class="wrap-normal p-2">
-                <p class="lg:w-[45%] rounded-lg bg-tertiary-200/70 p-2 wrap-anywhere">{message.text}</p>
+            {#if message.expand?.user?.email == $currentUser?.email}
+            <div class="wrap-normal p-2 flex flex-col items-end content-end">
+                <p class="lg:max-w-[90%] rounded-lg bg-secondary-100/70 p-2 wrap-anywhere">{message.text}</p>
                 <small>@{message.expand?.user?.name}</small>
             </div>
+            {:else}
+                <div class="wrap-normal p-2 flex flex-col">
+                <p class="lg:max-w-[90%] rounded-lg bg-tertiary-200/70 p-2 wrap-anywhere">{message.text}</p>
+                <small>@{message.expand?.user?.name}</small>
+                </div>
+            {/if}
         {/each}
-        <form on:submit|preventDefault={createMessage} class="w-full sticky bottom-0 left-0 h-15 border-primary-800 border-t-2 flex justify-between bg-tertiary-100 ">
-            <input placeholder="Type here to chat" size="50" type="text" bind:value={newMessage} class="w-[77%] bg-tertiary-100 h-full rounded p-2">
-            <button type='submit' class="btn text-center w-[21%] text-white bg-secondary-500 text-xl">SEND</button>
+        <form on:submit|preventDefault={createMessage} class="w-full sticky bottom-0 left-0 h-[7%] border-primary-500 border-t-4 flex justify-between bg-tertiary-100 ">
+            <input placeholder="Type here to chat" size="50" type="text" bind:value={newMessage} class="w-[77%] bg-tertiary-100 h-full rounded p-2 focus:bg-tertiary-450">
+            <button type='submit' class=" text-center w-[21%] text-white bg-primary-500 text-xl hover:bg-primary-700">SEND</button>
         </form>
     </div>
 </div>
