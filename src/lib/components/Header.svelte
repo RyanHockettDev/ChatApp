@@ -4,7 +4,7 @@
     import { currentUser, pb } from '../pocketbase';
     import { push } from 'svelte-spa-router'
 
-
+    // Prevents unauthorized users from accessing routes with the header in them
     onMount(() => {
       if (!get(currentUser)) {
         push('/')
@@ -39,14 +39,14 @@
           <div class="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none" aria-labelledby="headlessui-menu-button-1" id="headlessui-menu-items-117" role="menu">
             <div class="px-4 py-3">
               <p class="text-sm leading-5">Signed in as</p>
-              <p class="text-sm font-medium leading-5 text-gray-900 truncate">{$currentUser?.email}</p>
+              <p class="text-sm font-medium leading-5 text-gray-900 truncate">{$currentUser?.name}</p>
             </div>
             <div class="py-1">
               <a href="/settings" class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left"  role="menuitem" >Account settings</a>
               <span role="menuitem" tabindex="-1" class="flex justify-between w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 cursor-not-allowed opacity-50" aria-disabled="true">New feature (soon)</span>
               <a href="/chat" class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left" role="menuitem" >Main Chat</a></div>
             <div class="py-1">
-              <a href="/" class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left"  role="menuitem" on:click={signOut} >Sign out</a></div>
+              <a href="/" class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left"  role="menuitem" onclick={signOut} >Sign out</a></div>
           </div>
         </div>
     </div>
