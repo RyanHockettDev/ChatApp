@@ -3,11 +3,15 @@
     import { onMount, onDestroy, tick } from "svelte";
     import { currentUser, pb } from '../pocketbase';
     import {Tooltip} from '@skeletonlabs/skeleton-svelte'
-  
-    let openState = false;
-    let messages: any[] = [];
-    let flagMode:boolean = false;
-    let newMessage: string;
+    
+    let openState:boolean = false; // Variable for tooltip open state
+    let messages: any[] = []; // Array of messages to be displayed in the chat
+    let flagMode:boolean = false; // Variable for flag mode state
+    let newMessage: string; // Variable for created new message: bound to form input
+    let element: HTMLElement; // HTML element binding for autoscroll feature
+    let shouldScroll: boolean = true;
+ 
+    
 
     onMount(async () => {
         // Pulls 50 messages from messages collection
@@ -16,22 +20,24 @@
             expand: 'user',
         });
         messages = resultList.items.reverse(); //Reverse the list in order to display them from bottom of chat
-
+        
         // Watching for new or deleted messages
         pb.collection('messages').subscribe('*', async ({ action, record }) => {
             if (action === 'create'){ // New messages added to db collection are also added to messages array
                 const user = await pb.collection('users').getOne(record.user);
                 record.expand = { user };
-                messages = [...messages, record];
+                messages = await [...messages, record];
+                scrollToBottom()
+                
             }
             if( action === 'delete'){ // If a message is deleted, it is filtered from the array
                 messages = messages.filter((m) => m.id !== record.id);
             }
         })
 
-
+        // Watching for new message flags
         pb.collection('message_flags').subscribe('*', async ({action, record}) => {
-            if (action === 'create'){
+            if (action === 'create'){ // When a new flag is created, the db collection is searched for flags with a matching message.id
                 const filter = `message = "${record.message}"`
                 const resultList = await pb.collection('message_flags').getFullList({
                     filter: filter
@@ -40,22 +46,21 @@
                 const flagCount = resultList.length
                 if (flagCount > 1){
                     await pb.collection('messages').delete(record.message);
-
                     for (const flag of resultList) {
                     await pb.collection('message_flags').delete(flag.id)
                     }
                 }
             }
         })
+        scrollToBottom();
     });
 
     onDestroy(() => {
         pb.collection('messages').unsubscribe('*');
-        pb.collection('message_flags').unsubscribe('*')
-    })
+        pb.collection('message_flags').unsubscribe('*');
+    });
 
     async function createMessage() {
-        
         const data = {
             text: newMessage,
             user: $currentUser?.id
@@ -64,19 +69,20 @@
             return
         }
         await pb.collection('messages').create(data);
-        newMessage = ''
+        
+        newMessage = '';
     };
 
     async function createFlag(messageID:string) {
         if(!flagMode){
-            return
+            return;
         }else {
             const data = {
                 user: $currentUser?.id,
                 message: messageID
-            }
+            };
             try{
-                await pb.collection('message_flags').create(data)
+                await pb.collection('message_flags').create(data);
             } catch(error){
                 
             }
@@ -97,10 +103,28 @@
         }
     }
 
+   
+    const scrollToBottom = async () => {
+        await tick();
+        if(shouldScroll){
+            element.scroll({top: element.scrollHeight, behavior: 'smooth'})
+        }
+        
+    }
+
+    function setShouldScroll() {
+        if(element.scrollHeight - element.scrollTop - element.clientHeight > 5){
+            shouldScroll = false;
+        } else {
+            shouldScroll = true;
+        }          
+    }
+
+
 </script>
 <div class="h-[85%] flex ">
     <div class="lg:w-[60%] w-[90%] mx-auto mt-3 border border-primary-500 border-4 rounded-lg relative">
-        <div class='flex flex-col grow overflow-y-auto min-h-0 h-[92%]'>
+        <div bind:this={element} class='flex flex-col grow overflow-y-auto min-h-0 h-[92%]' onscroll={setShouldScroll}>
         {#each messages as message, i (message.id)}
            
             <div class="{i === 0 ? 'mt-auto' : ''} {message.expand?.user?.id == $currentUser?.id ? "items-end content-end" : "items-start content-start"}wrap-normal p-2 flex flex-col" >
