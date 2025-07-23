@@ -124,17 +124,17 @@
 </script>
 <div class="h-[85%] flex z-auto">
     <div class="lg:w-[60%] w-[90%] mx-auto mt-3 border border-primary-500 border-4 rounded-lg relative">
-        <div bind:this={element} class='flex flex-col grow overflow-y-auto min-h-0 h-[92%]' onscroll={setShouldScroll}>
+        <div bind:this={element} class='flex flex-col grow overflow-y-auto min-h-0 h-[92%]' on:scroll={setShouldScroll}>
         {#each messages as message, i (message.id)}
            
             <div class="{i === 0 ? 'mt-auto' : ''} {message.expand?.user?.id == $currentUser?.id ? "items-end content-end" : "items-start content-start"}wrap-normal p-2 flex flex-col" >
-                <button onclick={() => createFlag(message.id)} class="lg:max-w-[90%] rounded-lg {message.expand?.user?.id == $currentUser?.id ? "bg-secondary-100/70" : "bg-tertiary-200/70"} p-2 wrap-anywhere hover:cursor-default" aria-label="Enable flag mode, then click message to flag as inappropriate">{message.text}</button>
+                <button on:click={() => createFlag(message.id)} class="lg:max-w-[90%] rounded-lg {message.expand?.user?.id == $currentUser?.id ? "bg-secondary-100/70" : "bg-tertiary-200/70"} p-2 wrap-anywhere hover:cursor-default" aria-label="Enable flag mode, then click message to flag as inappropriate">{message.text}</button>
                 <small>@{message.expand?.user?.name}</small>
             </div>
             
         {/each}
         </div>
-        <form onsubmit={createMessage} class="w-full absolute bottom-0 left-0 border-primary-500 border-t-4  bg-primary-500 ">
+        <form on:submit|preventDefault={createMessage} class="w-full absolute bottom-0 left-0 border-primary-500 border-t-4  bg-primary-500 ">
             <Tooltip
                 open={openState}
                 onOpenChange={(e) => (openState = e.open)}
@@ -143,7 +143,7 @@
                 openDelay={200}
                 arrow
                 >
-                {#snippet trigger()}<button type=button class="btn " aria-label="Flag Messages Mode" onclick={toggleFlagMode} >
+                {#snippet trigger()}<button type=button class="btn " aria-label="Flag Messages Mode" on:click={toggleFlagMode} >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-5 hover:stroke-tertiary-300" id="flag">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.499l-3.11.732a9 9 0 0 1-6.085-.711l-.108-.054a9 9 0 0 0-6.208-.682L3 4.5M3 15V4.5" />
                 </svg>
