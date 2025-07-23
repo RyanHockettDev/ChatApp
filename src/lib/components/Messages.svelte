@@ -9,7 +9,7 @@
     let flagMode:boolean = false; // Variable for flag mode state
     let newMessage: string; // Variable for created new message: bound to form input
     let element: HTMLElement; // HTML element binding for autoscroll feature
-    let shouldScroll: boolean = true;
+    let shouldScroll: boolean = true; // Variable dependency for autoscrolling 
  
     
 
@@ -27,8 +27,7 @@
                 const user = await pb.collection('users').getOne(record.user);
                 record.expand = { user };
                 messages = await [...messages, record];
-                scrollToBottom()
-                
+                scrollToBottom() // Scrolls to bottom after any new message is created, scroll position dependent 
             }
             if( action === 'delete'){ // If a message is deleted, it is filtered from the array
                 messages = messages.filter((m) => m.id !== record.id);
@@ -52,7 +51,7 @@
                 }
             }
         })
-        scrollToBottom();
+        scrollToBottom(); // shouldScroll was initialized as true, so scrollToBottom fires once on mount
     });
 
     onDestroy(() => {
@@ -112,6 +111,7 @@
         
     }
 
+    // If user has scrolled up, calls to scrollToBottom will not scroll down. Initialized to true above to scroll once on mount
     function setShouldScroll() {
         if(element.scrollHeight - element.scrollTop - element.clientHeight > 5){
             shouldScroll = false;
@@ -122,7 +122,7 @@
 
 
 </script>
-<div class="h-[85%] flex ">
+<div class="h-[85%] flex z-auto">
     <div class="lg:w-[60%] w-[90%] mx-auto mt-3 border border-primary-500 border-4 rounded-lg relative">
         <div bind:this={element} class='flex flex-col grow overflow-y-auto min-h-0 h-[92%]' onscroll={setShouldScroll}>
         {#each messages as message, i (message.id)}

@@ -25,8 +25,9 @@
 
 </script>
 <div class="h-screen flex place-content-center">
-<div class=" bg-stone-100 border w-[40%] my-auto p-6 rounded-lg">
-    <div class="place-items-center">
+<div class="bg-primary-200/60 dark:bg-primary-500/60 shadow-[14px_14px_5px_1px_rgba(0,0,0,0.25)]
+         shadow-surface-500/40 w-full sm:w-[40%] my-auto mx-6 p-6">
+    <div class="place-items-center border-b border-primary-500 dark:border-primary-200 pb-4">
     <h1 class="mb-3 text-5xl">ChatApp</h1>
     {#if !selection}
     <h2>Log in below to start chatting!</h2>
@@ -34,14 +35,17 @@
     <h2>Enter your info to sign up!</h2>
     {/if}
     </div>
-    <hr class="hr mt-5">
-    <div class="divider"></div>
+    
     {#if !selection}
         <LoginForm/>
-        <p class="mt-3 text-center">New user? <button class="border rounded-lg ml-2 p-1 hover:bg-stone-300  text-sm"on:click={toggleSelection}>Sign Up</button></p>
+        <p class="mt-3 text-center">New user? <button class=" ml-2 p-1 hover:shadow-md hover:text-base focus:outline-none 
+            focus:shadow-md focus:text-base shadow-sm shadow-primary-500 text-sm dark:shadow-primary-800" onclick={toggleSelection}>Sign Up</button></p>
     {:else}
         <SignUpForm/>
-        <p class="mt-3 text-center">Already registerd? <button class="border rounded-md ml-2 p-1 hover:bg-stone-300"on:click={toggleSelection}>Login</button></p>
+        <p class="mt-3 text-center">Already registerd? <button class="ml-2 p-1 hover:shadow-md hover:text-base focus:outline-none 
+            focus:shadow-md focus:text-base shadow-sm shadow-primary-500 text-sm dark:shadow-primary-800" onclick={toggleSelection}>Login</button></p>
     {/if}
 </div>
 </div>
+
+<style></style>

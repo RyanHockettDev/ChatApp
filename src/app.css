@@ -3,6 +3,8 @@
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton/optional/presets';
 @import '@skeletonlabs/skeleton/themes/wintry';
+@import '@skeletonlabs/skeleton/themes/crimson';
+@import '@skeletonlabs/skeleton/themes/cerberus';
 
 @source '../../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
@@ -20,11 +22,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
 }
 
-.dropdown:focus-within .dropdown-menu {
-  /* @apply block; */
-  display:block;
-}
+
 
 
