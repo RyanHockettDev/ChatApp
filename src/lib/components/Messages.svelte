@@ -93,13 +93,7 @@
     function toggleFlagMode() {
         const flag = document.getElementById("flag")
 
-        if (flagMode == false){
-            flagMode = true;
-            flag?.setAttribute("fill", "white")
-        }else {
-            flagMode = false;
-            flag?.setAttribute("fill", "none")
-        }
+        flagMode == false ? flagMode = true : flagMode = false
     }
 
    
@@ -122,37 +116,46 @@
 
 
 </script>
-<div class="h-[85%] flex z-auto">
-    <div class="lg:w-[60%] w-[90%] mx-auto mt-3 border border-primary-500 border-4 rounded-lg relative">
+<div class="h-[85%] flex">
+    <div class="lg:w-[60%] w-[90%] mx-auto mt-5 bg-surface-100 dark:bg-surface-500 shadow-2xl shadow-primary-500  relative">
         <div bind:this={element} class='flex flex-col grow overflow-y-auto min-h-0 h-[92%]' on:scroll={setShouldScroll}>
         {#each messages as message, i (message.id)}
            
             <div class="{i === 0 ? 'mt-auto' : ''} {message.expand?.user?.id == $currentUser?.id ? "items-end content-end" : "items-start content-start"}wrap-normal p-2 flex flex-col" >
-                <button on:click={() => createFlag(message.id)} class="lg:max-w-[90%] rounded-lg {message.expand?.user?.id == $currentUser?.id ? "bg-secondary-100/70" : "bg-tertiary-200/70"} p-2 wrap-anywhere hover:cursor-default" aria-label="Enable flag mode, then click message to flag as inappropriate">{message.text}</button>
-                <small>@{message.expand?.user?.name}</small>
+                {#if i == 0 || i > 0 && messages[i-1].expand?.user?.id != message.expand?.user?.id}
+                <small class="p-2">@{message.expand?.user?.name}</small>
+                {/if}
+                <button on:click={() => createFlag(message.id)} class="lg:max-w-[90%] {message.expand?.user?.id == $currentUser?.id ? "bg-primary-100 rounded-l-xl rounded-br-xl dark:bg-primary-300" : "bg-white rounded-r-xl rounded-bl-xl dark:bg-surface-300"} 
+                    p-2 wrap-anywhere hover:cursor-default" aria-label="Click to flag the following message: {message.text} written by {message.expand?.user?.name}" tabindex={flagMode == false ? -1 : null }>{message.text}</button>
+                
             </div>
             
         {/each}
         </div>
-        <form on:submit|preventDefault={createMessage} class="w-full absolute bottom-0 left-0 border-primary-500 border-t-4  bg-primary-500 ">
+        <form on:submit|preventDefault={createMessage} class="w-full absolute bottom-0 left-0 my-2 px-2 flex flex-row justify-around items-center bg-surface-100 dark:bg-surface-500">
             <Tooltip
                 open={openState}
                 onOpenChange={(e) => (openState = e.open)}
                 positioning={{ placement: 'top' }}
+                triggerBase="focus:outline-none     "
                 contentBase="card preset-filled p-4"
                 openDelay={200}
                 arrow
+                aria-label="Visual tooltip explanation for the following button"
                 >
-                {#snippet trigger()}<button type=button class="btn " aria-label="Flag Messages Mode" on:click={toggleFlagMode} >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-5 hover:stroke-tertiary-300" id="flag">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.499l-3.11.732a9 9 0 0 1-6.085-.711l-.108-.054a9 9 0 0 0-6.208-.682L3 4.5M3 15V4.5" />
-                </svg>
-            </button>{/snippet}
+                {#snippet trigger()}
+                    <button type=button class="focus:outline-none bg-error-400/90 p-4 hover:p-5      shadow-[-7px_10px_7px_1px_rgba(0,0,0,0.25)] shadow-surface-400/80 focus:shadow-surface-500/90 dark:bg-error-500/90 dark:shadow-surface-700/50 dark:focus:shadow-surface-900/50" aria-label="Click to {flagMode == false ? "enable" : "disable"} message flagging mode - messages can be tabbed while flagging mode is enable" on:click={toggleFlagMode} >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill={flagMode == false ? "none" : "white"} viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-5 hover:stroke-3" id="flag">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.499l-3.11.732a9 9 0 0 1-6.085-.711l-.108-.054a9 9 0 0 0-6.208-.682L3 4.5M3 15V4.5" />
+                        </svg>
+                    </button>
+                {/snippet}
                 {#snippet content()}Click to enable "flag mode", then click a message to flag it as inappropriate{/snippet}
             </Tooltip>
             
-            <input placeholder="Type here to chat" size="50" type="text" bind:value={newMessage} class="focus:outline-none focus:bg-tertiary-200 sm:w-[70%] w-[65%] bg-tertiary-100 h-full p-2">
-            <button type='submit' class=" text-center w-[10%] sm:w-[20%] text-white bg-primary-500 text-xl hover:text-tertiary-300">SEND</button>
+            <textarea placeholder="Type here to chat" rows="2" cols="150"  bind:value={newMessage} class="focus:outline-none bg-surface-200 p-2 max-w-[70%] 
+                shadow-[0px_14px_7px_1px_rgba(0,0,0,0.25)] shadow-surface-400/90 focus:shadow-surface-500/90 dark:bg-surface-400 dark:shadow-surface-700/50 dark:focus:shadow-surface-900/50" aria-label="Type here to send messages in the chat"></textarea>
+            <button type='submit' class="text-center text-white bg-primary-300/90 text-lg p-2 m-2 hover:text-xl shadow-[7px_10px_7px_1px_rgba(0,0,0,0.25)] shadow-surface-400/80 focus:outline-none focus:shadow-surface-500/90 dark:bg-primary-400/90 dark:shadow-surface-700/50 dark:focus:shadow-surface-900/50" aria-label="Submit your message to the chat">SEND</button>
         </form>
         
     </div>
