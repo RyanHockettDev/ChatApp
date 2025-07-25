@@ -228,7 +228,6 @@
                     <select bind:value={$theme} id="theme" class="{inputClass} text-center" required >
                         <option value="wintry">Wintry</option>
                         <option value="mona">Mona</option>
-                        <option value="pine">Pine</option>
                         <option value="crimson">Crimson</option>
                         <option value="mint">Mint</option>
                         <option value="legacy">Legacy</option>
