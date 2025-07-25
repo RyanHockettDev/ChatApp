@@ -46,7 +46,7 @@
     $: if (signUpForm.password !== signUpForm.passwordConfirm && signUpForm.passwordConfirm !== ""){
         passwordMsg = "Passwords do not match!";
         passwordStatus="error"
-    } else {
+    } else if (signUpForm.password == signUpForm.passwordConfirm){
         passwordMsg = "Passwords match!";
         passwordStatus="success"
         setTimeout(() => {
