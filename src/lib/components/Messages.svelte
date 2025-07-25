@@ -118,7 +118,7 @@
 </script>
 <div class="sm:h-[85%] h-[75%] flex">
     <div class="lg:w-[60%] w-[90%] mx-auto mt-5 bg-surface-100 dark:bg-surface-500 shadow-[14px_14px_7px_1px_rgba(0,0,0,0.25)] shadow-surface-500 relative">
-        <div bind:this={element} class='flex flex-col grow overflow-y-auto min-h-0 h-[92%]' on:scroll={setShouldScroll}>
+        <div bind:this={element} class='flex flex-col grow overflow-y-auto min-h-0 h-[87%]' on:scroll={setShouldScroll}>
         {#each messages as message, i (message.id)}
            
             <div class="{i === 0 ? 'mt-auto' : ''} {message.expand?.user?.id == $currentUser?.id ? "items-end content-end" : "items-start content-start"}wrap-normal mb-2 flex flex-col" >
