@@ -43,10 +43,10 @@
     };
 
     //Password matching validation
-    $: if (signUpForm.password !== signUpForm.passwordConfirm && signUpForm.passwordConfirm !== ""){
+    $: if (signUpForm.password != signUpForm.passwordConfirm && signUpForm.passwordConfirm != ""){
         passwordMsg = "Passwords do not match!";
         passwordStatus="error"
-    } else if (signUpForm.password == signUpForm.passwordConfirm){
+    } else if (signUpForm.password == signUpForm.passwordConfirm && signUpForm.passwordConfirm != ""){
         passwordMsg = "Passwords match!";
         passwordStatus="success"
         setTimeout(() => {
