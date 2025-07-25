@@ -48,7 +48,7 @@
         const user = $currentUser?.id
         
             if (nameForm.name == $currentUser?.name) {
-                   toast("That's already your name!", "bg-error-500/60")
+                   toast("That's already your name!", "bg-warning-600/70")
             }else if (user && nameForm.name != ""){{ 
                 try{
                     await pb.collection('users').update(user, nameForm )
@@ -135,7 +135,7 @@
 </script>
 
 <Header/>
-<div class="mt-8 p-2 text-lg rounded-full text-surface-50 text-center w-[40%] mx-auto dark:text-surface-300" id="toaster">{$message}</div>
+<div class="mt-8 p-2 text-lg rounded-xl text-surface-50 text-center w-[40%] mx-auto dark:text-surface-300" id="toaster">{$message}</div>
 <section class="mx-auto mt-10 flex flex-col space-y-4 sm:text-lg text-sm items-center bg-primary-500 text-white rounded-none w-[340px] sm:w-[50%] dark:bg-surface-500 shadow-[14px_14px_7px_1px_rgba(0,0,0,0.25)] shadow-surface-500">
     
     <div class="flex justify-between items-center w-full transition ease-in-out duration-600">

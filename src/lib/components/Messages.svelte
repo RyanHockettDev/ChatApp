@@ -121,7 +121,7 @@
         <div bind:this={element} class='flex flex-col grow overflow-y-auto min-h-0 h-[92%]' on:scroll={setShouldScroll}>
         {#each messages as message, i (message.id)}
            
-            <div class="{i === 0 ? 'mt-auto' : ''} {message.expand?.user?.id == $currentUser?.id ? "items-end content-end" : "items-start content-start"}wrap-normal flex flex-col" >
+            <div class="{i === 0 ? 'mt-auto' : ''} {message.expand?.user?.id == $currentUser?.id ? "items-end content-end" : "items-start content-start"}wrap-normal mb-2 flex flex-col" >
                 {#if i == 0 || messages[i-1]?.expand?.user?.id != message.expand?.user?.id}
                 <small class="p-2 mt-2">@{message.expand?.user?.name}</small>
                 {/if}
@@ -154,8 +154,8 @@
                 {#snippet content()}Click to enable "flag mode", then click a message to flag it as inappropriate{/snippet}
             </Tooltip>
             
-            <textarea placeholder="Type here to chat" rows="2" cols="150"  bind:value={newMessage} class="focus:outline-none bg-surface-200 p-2 max-w-[70%] 
-                focus:shadow-[14px_14px_7px_1px_rgba(0,0,0,0.25)] focus:shadow-surface-500/90 dark:bg-surface-400 dark:focus:shadow-surface-900/50 focus:text-lg transition ease-in-out duration-200    " aria-label="Type here to send messages in the chat"></textarea>
+            <input placeholder="Type here to chat"  bind:value={newMessage} class="focus:outline-none bg-surface-200 p-2 w-[70%] py-4 max-w-[70%] 
+                focus:shadow-[14px_14px_7px_1px_rgba(0,0,0,0.25)] focus:shadow-surface-500/90 dark:bg-surface-400 dark:focus:shadow-surface-900/50 focus:text-lg transition ease-in-out duration-200" aria-label="Type here to send messages in the chat">
             <button type='submit' class="text-center text-white bg-primary-500/90 text-lg p-2 m-2 hover:text-xl 
             focus:shadow-[7px_10px_7px_1px_rgba(0,0,0,0.25)] hover:shadow-[7px_10px_7px_1px_rgba(0,0,0,0.25)] focus:outline-none focus:text-xl 
             focus:shadow-surface-500/90 dark:bg-primary-400/90 dark:focus:shadow-surface-900/50 transition ease-in-out duration-200" 
