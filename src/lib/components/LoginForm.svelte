@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { pb, theme } from '../pocketbase';
+    import { pb } from '../pocketbase';
     import { push } from 'svelte-spa-router'
     import {Tooltip} from '@skeletonlabs/skeleton-svelte'
+    import { theme } from '../theme';
     
   
     

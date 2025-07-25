@@ -4,6 +4,7 @@
     import { currentUser, pb } from '../pocketbase';
     import { push, location } from 'svelte-spa-router'
     import { Popover } from '@skeletonlabs/skeleton-svelte'
+    
 
     let openState:boolean = false;
 
@@ -23,9 +24,7 @@
     }
 
     let modal:boolean = true;
-    let linkClass="py-2 mx-20 focus:outline-none focus:text-2xl focus:shadow-[10px_10px_5px_1px_rgba(0,0,0,0.25)] focus:shadow-secondary-700/90 transition duration-200 ease-out focus:inset-shadow-sm focus:inset-shadow-secondary-600/20 hover:text-2xl hover:shadow-[10px_10px_5px_1px_rgba(0,0,0,0.25)] hover:shadow-secondary-700/90 hover:inset-shadow-sm hover:inset-shadow-secondary-600/90"
-
-    console.log(get(location))
+    let linkClass="py-2 mx-20 focus:outline-none focus:text-2xl focus:shadow-[10px_10px_5px_1px_rgba(0,0,0,0.25)] focus:shadow-secondary-700/90 transition duration-600 ease-out focus:inset-shadow-sm focus:inset-shadow-secondary-600/20 hover:text-2xl hover:shadow-[10px_10px_5px_1px_rgba(0,0,0,0.25)] hover:shadow-secondary-700/90 hover:inset-shadow-sm hover:inset-shadow-secondary-600/90"
 
 </script>
 <nav class="flex items-center justify-between bg-primary-500 mx-4 p-3 shadow-[10px_10px_7px_1px_rgba(0,0,0,0.25)] shadow-surface-400/80">
@@ -44,7 +43,7 @@
   triggerBase="px-4 py-2 transition duration-200 ease-out font-bold mr-6 bg-white focus:outline-none focus:shadow-[10px_10px_5px_1px_rgba(0,0,0,0.25)] 
   focus:shadow-primary-700/90 focus:text-lg hover:shadow-[10px_10px_5px_1px_rgb(0,0,0,)] hover:shadow-primary-700/90 hover:text-lg dark:text-black"
   triggerAriaLabel="Navigation menu"
-  contentBase="bg-secondary-100 px-2 pb-2 w-[360px] flex flex-col focus:outline-none shadow-[10px_10px_5px_1px_rgba(0,0,0,0.25)] 
+  contentBase="bg-secondary-100/90 px-2 pb-2 w-[360px] flex flex-col focus:outline-none shadow-[10px_10px_5px_1px_rgba(0,0,0,0.25)] 
   shadow-secondary-700/40 dark:text-black"
   arrow
   arrowBackground="!bg-surface-200 dark:!bg-surface-800"
@@ -59,7 +58,7 @@
         <p class="font-bold px-4">Signed in as:</p>
         <p class="px-4">{$currentUser?.name}</p>
       </div>
-      <button class="font-medium mx-4 hover:text-shadow-secondary-400/50 hover:text-shadow-[4px_2px_rgb(0,0,0)] hover:text-2xl focus:text-shadow-secondary-400/50 focus:outline-none focus:text-shadow-[4px_2px_rgb(0,0,0)] focus:text-2xl" aria-label="Close menu">
+      <button onclick={popoverClose} class="font-medium mx-4 hover:text-shadow-secondary-400/50 hover:text-shadow-[4px_2px_rgb(0,0,0)] hover:text-2xl focus:text-shadow-secondary-400/50 focus:outline-none focus:text-shadow-[4px_2px_rgb(0,0,0)] focus:text-2xl" aria-label="Close menu">
         X
       </button>
       
@@ -70,7 +69,7 @@
     <a href="/#/settings" class="{linkClass}" aria-label="Account settings">Settings</a>
     {/if}
     {#if get(location) != "/chat"}
-    <a href="/#/chat settings" class="{linkClass}" aria-label="Main chat">Main Chat</a>
+    <a href="/#/chat" class="{linkClass}" aria-label="Main chat">Main Chat</a>
     {/if}
     <a href="/#/" class="{linkClass}" onclick={signOut} aria-label="Sign out of ChatApp">Sign out</a>
     </section>

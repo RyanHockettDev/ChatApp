@@ -1,12 +1,12 @@
 <script lang="ts">
   import Router from 'svelte-spa-router'
   import  routes  from './lib/routes'
-  import { theme, currentUser } from './lib/pocketbase';
+  import { currentUser } from './lib/pocketbase';
+  import { theme } from './lib/theme';
 
-  theme.subscribe((value) => {
-    document.documentElement.setAttribute("data-theme", value)
-  })
+
   
+  $: document.documentElement.setAttribute("data-theme", $theme)
  
   if (currentUser) {
     theme.set($currentUser?.theme ?? 'wintry')
@@ -15,6 +15,7 @@
 </script>
 
 <main class="h-screen">
+  
   <Router {routes}/>
 </main>
 

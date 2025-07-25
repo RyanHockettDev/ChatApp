@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { pb } from "../pocketbase";
+    import { currentUser, pb } from "../pocketbase";
     import { push } from "svelte-spa-router";
     import { Tooltip } from "@skeletonlabs/skeleton-svelte";
 
@@ -15,7 +15,8 @@
         theme: "wintry"
     };
 
-    let message = "";
+    let passwordMsg = "";
+    let passwordStatus = ""
 
     let type="password";
 
@@ -24,7 +25,7 @@
     async function signUp() {
         //Error handling for missing fields
         if (!signUpForm.email || !signUpForm.password || !signUpForm.passwordConfirm || !signUpForm.name) {
-                message = "Please fill out all fields";
+                passwordMsg = "Please fill out all fields";
             }else {
                 try{
                     // CRUD - Create new user
@@ -43,9 +44,14 @@
 
     //Password matching validation
     $: if (signUpForm.password !== signUpForm.passwordConfirm && signUpForm.passwordConfirm !== ""){
-        message = "Passwords do not match!";
+        passwordMsg = "Passwords do not match!";
+        passwordStatus="error"
     } else {
-        message = "";
+        passwordMsg = "Passwords match!";
+        passwordStatus="success"
+        setTimeout(() => {
+            passwordMsg=""
+        }, 3000)
     }
 
     function toggleType() {
@@ -113,9 +119,9 @@
         <input bind:value={signUpForm.passwordConfirm} type="password" id="passwordConfirm" class="{inputClass}" required />
     </div>
     
-    {#if message}
+    {#if passwordMsg }
         <div class="text-center">
-        <p class="text-error-600 mb-5 font-medium" id="info">{message}</p>
+            <p class="{passwordStatus == "error" ? "text-error-600" : "text-success-600"} my-1 font-medium rounded-full bg-white px-2" id="info">{passwordMsg}</p>
         </div>
     {/if}
     <div class="text-center">
